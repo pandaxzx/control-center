@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jdrx.aaa.control.center.dao.MonitorPointAttributeDao">
+	<select id="list" parameterType="com.jdrx.aaa.control.center.dto.AttributeQueryDto"
+		resultType="com.jdrx.aaa.control.center.entry.MonitorPointAttribute">
+		
+		SELECT
+			ID,
+			point_id,
+			"name",
+			tag,
+			"group",
+			unit,
+			biz_monitor
+		FROM
+			cc_monitor_point_attribute
+		WHERE
+			tag != ''
+			<if test="pointId != null">
+				and point_id = #{pointId}
+			</if>
+			<if test="bizPipe != null">
+				and biz_pipe = 0
+			</if>
+			<if test="bizScreen != null">
+				and biz_screen = 0
+			</if>
+			<if test="bizMonitor != null">
+				and biz_monitor != ''
+			</if>
+			<if test="pointIds != null and pointIds.size > 0">
+				and point_id in
+				<foreach collection="pointIds" item="item" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+	</select>
+</mapper>

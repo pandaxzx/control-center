@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jdrx.aaa.control.center.dao.ControlCenterDao">
+	<resultMap id="pointAttributeMap" type="com.jdrx.aaa.control.center.entry.MonitorPoint">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="lon" property="lon" />
+		<result column="lat" property="lat" />
+		<result column="status" property="status" />
+		
+		<!-- <collection property="sensors" column="id" select="listMonitoringPointAttribute" 
+			ofType="com.jdrx.aaa.control.center.entry.MonitoringPointAttribute" /> -->
+	</resultMap>
+	
+	<select id="listPointAttribute" resultMap="pointAttributeMap" parameterType="long">
+		SELECT
+		id,name,type,lon,lat
+		FROM cc_monitor_point
+		<where>
+			<if test="type != null"> and type=#{type}</if>
+		</where>
+	</select>
+
+	<select id="listMonitoringPoint" resultType="com.jdrx.aaa.control.center.entry.MonitorPoint">
+		SELECT
+		id,name,type,lon,lat
+		FROM cc_monitor_point
+	</select>
+
+	<select id="listMonitoringPointAttribute"
+		resultType="com.jdrx.aaa.control.center.entry.MonitorPointAttribute"
+		parameterType="long">
+		SELECT
+		id,name,tag,unit,point_id,"group"
+		FROM
+		cc_monitor_point_attribute
+		where biz_screen=0
+		<if test="id != null"> and point_id=#{id}</if>
+	</select>
+
+	<select id="getMonitoringPointById" resultType="com.jdrx.aaa.control.center.entry.MonitorPoint">
+		SELECT
+		id,name,type,lon,lat
+		FROM cc_monitor_point WHERE id=#{id}
+	</select>
+
+	<select id="listMonitoringPointByTpye" resultType="com.jdrx.aaa.control.center.entry.MonitorPoint">
+		SELECT
+		id,name,type,lon,lat
+		FROM cc_monitor_point WHERE type=#{type}
+	</select>
+</mapper>
